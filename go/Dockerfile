@@ -1,15 +1,9 @@
-FROM golang:1.22 AS build
-
-WORKDIR /opt/src
-COPY . .
-WORKDIR /opt/src/go
+FROM gcr.io/distroless/base-debian12
 
 RUN go get -d -v ./...
 RUN go build -o quickstart
 
-FROM gcr.io/distroless/base-debian12
-
-COPY --from=build /opt/src/go/quickstart /
+COPY ./go/quickstart /
 
 EXPOSE 8000
 ENTRYPOINT ["/quickstart"]
